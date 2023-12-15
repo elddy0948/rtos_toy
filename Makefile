@@ -31,7 +31,7 @@ debug: $(navilos)
 
 
 gdb:
-	arm-nnone-eabi-gdb
+	arm-none-eabi-gdb
 
 $(navilos): $(ASM_OBJS) $(LINKER_SCRIPT)
 	$(LD) -n -T $(LINKER_SCRIPT) -o $(navilos) $(ASM_OBJS)
