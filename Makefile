@@ -37,6 +37,6 @@ $(navilos): $(ASM_OBJS) $(LINKER_SCRIPT)
 	$(LD) -n -T $(LINKER_SCRIPT) -o $(navilos) $(ASM_OBJS)
 	$(OC) -O binary $(navilos) $(navilos_bin)
 
-build/%.0: boot/%.S
+build/%.o: boot/%.S
 	mkdir -p $(shell dirname $@)
 	$(AS) -march=$(ARCH) -mcpu=$(MCPU) -I $(INC_DIRS) -g -o $@ $<
