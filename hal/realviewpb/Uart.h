@@ -4,7 +4,7 @@
 
 typedef unsigned int uint32_t;
 
-union UARTDR_t
+typedef union UARTDR_t
 {
     uint32_t all;
     // : means bit-fields
@@ -17,9 +17,9 @@ union UARTDR_t
         uint32_t OE:1;
         uint32_t RES:4;
     } bits;
-};
+} UARTDR_t;
 
-union UARTRSR
+typedef union UARTRSR
 {
     uint32_t all;
 
@@ -32,9 +32,9 @@ union UARTRSR
         uint32_t RES:4;
         uint32_t CLR:8;
     } bits;
-};
+} UARTRSR;
 
-union UARTECR
+typedef union UARTECR
 {
     uint32_t all;
     struct
@@ -46,10 +46,10 @@ union UARTECR
         uint32_t RES:4;
         uint32_t CLR:8;
     } bits;
-};
+} UARTECR;
 
 /* FLAG REGISTER */
-union UARTFR
+typedef union UARTFR
 {
     uint32_t all;
 
@@ -66,40 +66,40 @@ union UARTFR
         uint32_t RI:1;
         uint32_t RES:7;
     };
-};
+} UARTFR;
 
 /* IrDA LOW-POWER COUNTER REGISTER */
-union UARTILPR
+typedef union UARTILPR
 {
     uint32_t all;
     struct bits
     {
         uint32_t ILPDVSR:8; // 0 is illegal value
     };
-};
+} UARTILPR;
 
 /* INTEGER PART OF THE BAUD RATE DIVISOR VALUE */
-union UARTIBRD
+typedef union UARTIBRD
 {
     uint32_t all;
     struct bits
     {
         uint32_t BAUD_DIVINT:16;
     };
-};
+} UARTIBRD;
 
 /* FRACTIONAL BAUD RATE DIVISOR VALUE */
-union UARTFBRD
+typedef union UARTFBRD
 {
     uint32_t all;
     struct bits
     {
         uint32_t BAUD_DIVFRAC:6;
     };
-};
+} UARTFBRD;
 
 /* UART LINE CONTROL REGISTER */
-union UARTLCR_H
+typedef union UARTLCR_H
 {
     uint32_t all;
     struct bits
@@ -113,10 +113,10 @@ union UARTLCR_H
         uint32_t SPS:1;
         uint32_t RESERVED:8;
     };
-};
+}UARTLCR_H;
 
 /* UART CONTROL REGISTER */
-union UARTCR
+typedef union UARTCR
 {
     uint32_t all;
     struct bits
@@ -135,10 +135,10 @@ union UARTCR
         uint32_t RTSEN:1;
         uint32_t CTSEN:1;
     };
-};
+} UARTCR;
 
 /* INTERRUPT FIFO LEVEL SELECT REGISTER */
-union UARTIFLS
+typedef union UARTIFLS
 {
     uint32_t all;
     struct bits
@@ -147,10 +147,10 @@ union UARTIFLS
         uint32_t RXIFLSEL:3;
         uint32_t RESERVED:10;
     };
-};
+} UARTIFLS;
 
 /* INTERRUPT MASK SET/CLEAR REGISTER */
-union UARTIMSC
+typedef union UARTIMSC
 {
     uint32_t all;
     struct bits
@@ -168,10 +168,10 @@ union UARTIMSC
         uint32_t OEIM:1;
         uint32_t RESERVED:5;
     };
-};
+} UARTIMSC;
 
 /* RAW INTERRUPT STATUS REGISTER */
-union UARTRIS
+typedef union UARTRIS
 {
     uint32_t all;
     struct bits 
@@ -189,10 +189,10 @@ union UARTRIS
         uint32_t OERIS:1;
         uint32_t RESERVED:5;
     };
-};
+} UARTRIS;
 
 /* MASKED INTERRUPT STATUS REGISTER */
-union UARTMIS
+typedef union UARTMIS
 {
     uint32_t all;
     struct bits
@@ -210,10 +210,10 @@ union UARTMIS
         uint32_t OEMIS:1;
         uint32_t RESERVED:5;
     };
-};
+} UARTMIS;
 
 /* INTERRUPT CLEAR REGISTER AND WRITE-ONLY */
-union UARTICR
+typedef union UARTICR
 {
     uint32_t all;
     struct bits
@@ -231,19 +231,19 @@ union UARTICR
         uint32_t OEIC:1;
         uint32_t RESERVED:5;
     };
-};
+} UARTICR;
 
-union UARTDMACR
+typedef union UARTDMACR
 {
     uint32_t all;
-    struct bits
+    struct
     {
         uint32_t RXDMAE:1;
         uint32_t TXDMAE:1;
         uint32_t DMAONERR:1;
         uint32_t RESERVED:13;
-    };
-};
+    } bits;
+} UARTDMACR;
 
 typedef struct PL011_t
 {
@@ -263,7 +263,7 @@ typedef struct PL011_t
     UARTMIS uartmis;        // 0x040
     UARTICR uarticr;        // 0x044
     UARTDMACR uartdmacr;    // 0x048
-};
+} PL011_t;
 
 #define UART_BASE_ADDRESS0  0x10009000
 #define UART_INTERRUPT0     44
