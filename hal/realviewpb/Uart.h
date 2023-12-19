@@ -48,8 +48,6 @@ union UARTECR
     } bits;
 };
 
-// Q: - UARTRSR / UARTECR REGISTER은 두 레지스터 다 만들어야 하는가?
-
 /* FLAG REGISTER */
 union UARTFR
 {
@@ -246,8 +244,6 @@ union UARTDMACR
         uint32_t RESERVED:13;
     };
 };
-
-// uint32_t reserved0[4] // 0x008 - 0x014
 
 typedef struct PL011_t
 {
