@@ -2,27 +2,274 @@
 #ifndef HAL_REALVIEWPB_UART_H
 #define HAL_REALVIEWPB_UART_H
 
-typedef union UARTDR_t
+typedef unsigned int uint32_t;
+
+union UARTDR_t
 {
-    unsigned int all;
+    uint32_t all;
     // : means bit-fields
-    // TODO: - read PL011 data sheet page 50~ then make register
     struct
     {
-        unsigned int DATA:8;
-        unsigned int FE:1;
+        uint32_t DATA:8;
+        uint32_t FE:1;
+        uint32_t PE:1;
+        uint32_t BE:1;
+        uint32_t OE:1;
+        uint32_t RES:4;
     } bits;
 };
 
-// TODO: - UARTSR
+union UARTRSR
+{
+    uint32_t all;
+
+    struct
+    {
+        uint32_t FE:1;
+        uint32_t PE:1;
+        uint32_t BE:1;
+        uint32_t OE:1;
+        uint32_t RES:4;
+        uint32_t CLR:8;
+    } bits;
+};
+
+union UARTECR
+{
+    uint32_t all;
+    struct
+    {
+        uint32_t FE:1;
+        uint32_t PE:1;
+        uint32_t BE:1;
+        uint32_t OE:1;
+        uint32_t RES:4;
+        uint32_t CLR:8;
+    } bits;
+};
+
+// Q: - UARTRSR / UARTECR REGISTER은 두 레지스터 다 만들어야 하는가?
+
+/* FLAG REGISTER */
+union UARTFR
+{
+    uint32_t all;
+
+    struct bits
+    {
+        uint32_t CTS:1;
+        uint32_t DSR:1;
+        uint32_t DCD:1;
+        uint32_t BUSY:1;
+        uint32_t RXFE:1;
+        uint32_t TXFF:1;
+        uint32_t RXFF:1;
+        uint32_t TXFE:1;
+        uint32_t RI:1;
+        uint32_t RES:7;
+    };
+};
+
+/* IrDA LOW-POWER COUNTER REGISTER */
+union UARTILPR
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t ILPDVSR:8; // 0 is illegal value
+    };
+};
+
+/* INTEGER PART OF THE BAUD RATE DIVISOR VALUE */
+union UARTIBRD
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t BAUD_DIVINT:16;
+    };
+};
+
+/* FRACTIONAL BAUD RATE DIVISOR VALUE */
+union UARTFBRD
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t BAUD_DIVFRAC:6;
+    };
+};
+
+/* UART LINE CONTROL REGISTER */
+union UARTLCR_H
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t BRK:1;
+        uint32_t PEN:1;
+        uint32_t EPS:1;
+        uint32_t STP2:1;
+        uint32_t FEN:1;
+        uint32_t WLEN:2;
+        uint32_t SPS:1;
+        uint32_t RESERVED:8;
+    };
+};
+
+/* UART CONTROL REGISTER */
+union UARTCR
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t UARTEN:1;
+        uint32_t SIREN:1;
+        uint32_t SIRLP:1;
+        uint32_t RESERVED:4;
+        uint32_t LBE:1;
+        uint32_t TXE:1;
+        uint32_t RXE:1;
+        uint32_t DTR:1;
+        uint32_t RTS:1;
+        uint32_t OUT1:1;
+        uint32_t OUT2:1;
+        uint32_t RTSEN:1;
+        uint32_t CTSEN:1;
+    };
+};
+
+/* INTERRUPT FIFO LEVEL SELECT REGISTER */
+union UARTIFLS
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t TXIFLSEL:3;
+        uint32_t RXIFLSEL:3;
+        uint32_t RESERVED:10;
+    };
+};
+
+/* INTERRUPT MASK SET/CLEAR REGISTER */
+union UARTIMSC
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t RIMIM:1;
+        uint32_t CTSMIM:1;
+        uint32_t DCDMIM:1;
+        uint32_t DSRMIM:1;
+        uint32_t RXIM:1;
+        uint32_t TXIM:1;
+        uint32_t RTIM:1;
+        uint32_t FEIM:1;
+        uint32_t PEIM:1;
+        uint32_t BEIM:1;
+        uint32_t OEIM:1;
+        uint32_t RESERVED:5;
+    };
+};
+
+/* RAW INTERRUPT STATUS REGISTER */
+union UARTRIS
+{
+    uint32_t all;
+    struct bits 
+    {
+        uint32_t RIRMIS:1;
+        uint32_t CTSRMIS:1;
+        uint32_t DCDRMIS:1;
+        uint32_t DSRRMIS:1;
+        uint32_t RXRIS:1;
+        uint32_t TXRIS:1;
+        uint32_t RTRIS:1;
+        uint32_t FERIS:1;
+        uint32_t PERIS:1;
+        uint32_t BERIS:1;
+        uint32_t OERIS:1;
+        uint32_t RESERVED:5;
+    };
+};
+
+/* MASKED INTERRUPT STATUS REGISTER */
+union UARTMIS
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t RIMMIS:1;
+        uint32_t CTSMMIS:1;
+        uint32_t DCDMMIS:1;
+        uint32_t DSRMMIS:1;
+        uint32_t RXMIS:1;
+        uint32_t TXMIS:1;
+        uint32_t RTMIS:1;
+        uint32_t FEMIS:1;
+        uint32_t PEMIS:1;
+        uint32_t BEMIS:1;
+        uint32_t OEMIS:1;
+        uint32_t RESERVED:5;
+    };
+};
+
+/* INTERRUPT CLEAR REGISTER AND WRITE-ONLY */
+union UARTICR
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t RIMIC:1;
+        uint32_t CTSMIC:1;
+        uint32_t DCDMIC:1;
+        uint32_t DSRMIC:1;
+        uint32_t RXIC:1;
+        uint32_t TXIC:1;
+        uint32_t RTIC:1;
+        uint32_t FEIC:1;
+        uint32_t PEIC:1;
+        uint32_t BEIC:1;
+        uint32_t OEIC:1;
+        uint32_t RESERVED:5;
+    };
+};
+
+union UARTDMACR
+{
+    uint32_t all;
+    struct bits
+    {
+        uint32_t RXDMAE:1;
+        uint32_t TXDMAE:1;
+        uint32_t DMAONERR:1;
+        uint32_t RESERVED:13;
+    };
+};
+
 // uint32_t reserved0[4] // 0x008 - 0x014
-// TODO: - UARTFR
-// ...
-// TODO: - ~UARTDMACR
 
 typedef struct PL011_t
 {
-    // TODO: - BASE ADDRESS FOR REGISTER
+    UARTDR_t uartdr;        // 0x000
+    UARTRSR uartrsr;        // 0x004    
+    uint32_t reserved0[4];  // 0x008 - 0x014
+    UARTFR uartfr;          // 0x018
+    uint32_t reserved1;     // 0x01C
+    UARTILPR uartilpr;      // 0x020
+    UARTIBRD uartibrd;      // 0x024
+    UARTFBRD uartfbrd;      // 0x028
+    UARTLCR_H uartlcr_h;    // 0x02C
+    UARTCR  uartcr;         // 0x030
+    UARTIFLS uartifls;      // 0x034
+    UARTIMSC uartimsc;      // 0x038
+    UARTRIS uartris;        // 0x03C
+    UARTMIS uartmis;        // 0x040
+    UARTICR uarticr;        // 0x044
+    UARTDMACR uartdmacr;    // 0x048
 };
+
+#define UART_BASE_ADDRESS0  0x10009000
+#define UART_INTERRUPT0     44
 
 #endif /* HAL_REALVIEWPB_UART_H */
