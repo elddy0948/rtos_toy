@@ -1,5 +1,5 @@
-#include "ARMv7AR.h"
-#include "MemoryMap.h"
+#include "../include/ARMv7AR.h"
+#include "../include/MemoryMap.h"
 
 .text
     .code 32
