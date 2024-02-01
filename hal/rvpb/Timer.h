@@ -44,18 +44,13 @@ typedef union TimerXMIS_t
 
 typedef struct Timer_t
 {
-	uint32_t all;
-	
-	struct
-	{
-		uint32_t timerxload;			// 0x00
-		uint32_t timerxvalue;			// 0x04
-		TimerXControl_t timerxcontrol;	// 0x08
-		uint32_t timerintclr;			// 0x0C
-		TimerXRIS_t timerxris;			// 0x10
-		TimerXMIS_t timerxmis;			// 0x14
-		uint32_t timerxbgload;			// 0x18
-	} bits;
+	uint32_t timerxload;			// 0x00
+	uint32_t timerxvalue;			// 0x04
+	TimerXControl_t timerxcontrol;	// 0x08
+	uint32_t timerintclr;			// 0x0C
+	TimerXRIS_t timerxris;			// 0x10
+	TimerXMIS_t timerxmis;			// 0x14
+	uint32_t timerxbgload;			// 0x18
 } Timer_t;
 
 #define TIMER_CPU_BASE 0x10011000
