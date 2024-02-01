@@ -53,7 +53,7 @@ void Hal_interrupt_disable(uint32_t interrupt_num)
 	}
 }
 
-void Hal_interrupt_register_handler(InterHandlr_fptr handler, uint32_t interrupt_num)
+void Hal_interrupt_register_handler(InterHdlr_fptr handler, uint32_t interrupt_num)
 {
 	sHandlers[interrupt_num] = handler;
 }
