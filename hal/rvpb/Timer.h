@@ -1,7 +1,7 @@
 #ifndef HAL_RVPB_TIMER_H_
 #define HAL_RVPB_TIMER_H_
 
-#include "../include/stdint.h"
+#include "../../include/stdint.h"
 
 typedef union TimerXControl_t
 {
