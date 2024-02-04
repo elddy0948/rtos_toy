@@ -62,6 +62,6 @@ typedef struct Timer_t
 #define TIMER_16BIT_COUNTER 0
 #define TIMER_32BIT_COUNTER 1
 
-#define TIMER_1MZ_INTERVAL (1024 * 1024)
+#define TIMER_1MZ_INTERVAL (32768 * 4)
 
 #endif /* HAL_RVPB_TIMER_H_ */
