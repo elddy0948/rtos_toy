@@ -49,6 +49,7 @@ static void Printf_test(void)
 	
 	// check which timer clock using now
 	uint32_t* sysctrl0 = (uint32_t*) 0x10001000;
+	uint32_t* sysctrl1 = (uint32_t*) 0x1001A000;
 
 	debug_printf("%s\n", "Hello printf");
 	debug_printf("output string pointer: %s\n", str);
@@ -57,6 +58,7 @@ static void Printf_test(void)
 	debug_printf("dec=%u hex=%x\n", 0xff, 0xff);
 	debug_printf("print zero %u\n", 0);
 	debug_printf("SYSCTRL0 %x\n", *sysctrl0);
+	debug_printf("SYSCTRL1 %x\n", *sysctrl1);
 }
 
 static void Timer_test(void)
@@ -64,6 +66,6 @@ static void Timer_test(void)
 	while(1)
 	{
 		debug_printf("current count : %u\n", Hal_timer_get_1ms_counter());
-		delay(1000);	// 1s
+		delay(1);	// 1s
 	}
 }

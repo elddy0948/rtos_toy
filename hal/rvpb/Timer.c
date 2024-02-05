@@ -1,6 +1,7 @@
 #include "Timer.h"
 #include "../HalTimer.h"
 #include "../HalInterrupt.h"
+#include "stdio.h"
 
 extern volatile Timer_t* Timer;
 
@@ -31,7 +32,7 @@ void Hal_timer_init(void)
 
 	uint32_t interval_1ms = TIMER_1MZ_INTERVAL / 100;
 
-	Timer->timerxload = interval_1ms;
+	Timer->timerxload = 1000000;
 	Timer->timerxcontrol.bits.TimerEn = 1;
 
 	/* Register timer interrupt handler */
@@ -46,6 +47,7 @@ uint32_t Hal_timer_get_1ms_counter(void)
 
 static void interrupt_handler(void)
 {
+	// debug_printf("%u\n", Timer->timerxload);
 	internal_1ms_counter++;
 	Timer->timerxintclr = 1;
 }
