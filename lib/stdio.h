@@ -1,6 +1,7 @@
 #ifndef LIB_STDIO_H
 #define LIB_STDIO_H
 
+#include "../include/stdint.h"
 #include "../include/stdarg.h"
 
 typedef enum utoa_t
