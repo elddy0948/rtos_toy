@@ -4,7 +4,6 @@
 
 // Lib
 #include "../lib/stdio.h"
-#include <wctype.h>
 
 // Kernel
 #include "./event.h"
