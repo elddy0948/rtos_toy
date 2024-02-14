@@ -29,10 +29,10 @@ int main(void)
 	Hw_init();
 
 	Printf_test();
-	Timer_test();
+	// Timer_test();
 
 	Kernel_init();
-	
+
 	while(1);
 
 	return 0;
@@ -73,7 +73,7 @@ static void Printf_test(void)
 	char* str = "printf pointer test";
 	char* nullptr = 0;
 	uint32_t i = 5;
-	
+
 	// check which timer clock using now
 	uint32_t* sysctrl0 = (uint32_t*) 0x10001000;
 
@@ -98,9 +98,9 @@ static void Timer_test(void)
 void User_task0(void)
 {
 	uint32_t local = 0;
-	
+
 	debug_printf("User Task #0 SP=0x%x\n", &local);
-	
+
 	while (true)
 	{
 		KernelEventFlag_t handle_event = Kernel_wait_events(KernelEventFlag_UartIn | KernelEventFlag_CmdOut);
@@ -122,6 +122,7 @@ void User_task1(void)
 	uint32_t local = 0;
 
 	debug_printf("User Task #1 SP=0x%x\n", &local);
+
 	while (true)
 	{
 		KernelEventFlag_t handle_event = Kernel_wait_events(KernelEventFlag_CmdIn);
@@ -140,7 +141,7 @@ void User_task2(void)
 	uint32_t local = 0;
 
 	debug_printf("User Task #2 SP=0x%x\n", &local);
-	
+
 	while (true)
 	{
 		Kernel_yield();

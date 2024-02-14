@@ -1,9 +1,10 @@
 // Include
-#include "../include/stdint.h"
-#include "../include/stdbool.h"
+#include "stdint.h"
+#include "stdbool.h"
 
+#include "stdio.h"
 // Kernel
-#include "./event.h"
+#include "event.h"
 
 static uint32_t sEventFlag;
 
@@ -23,13 +24,15 @@ void Kernel_event_flag_clear(KernelEventFlag_t event)
 {
 	// clear event bit
 	sEventFlag &= ~((uint32_t)event);
+	debug_printf("\nEvent cleared : %x\n", sEventFlag);
 }
 
 bool Kernel_event_flag_check(KernelEventFlag_t event)
 {
 	if (sEventFlag & (uint32_t)event)
 	{
-		// if event flag is more than 0 
+		// if event flag is more than 0
+		debug_printf("\nEvent is : %x\n", event);
 		Kernel_event_flag_clear(event);
 		return true;
 	}

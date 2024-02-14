@@ -1,8 +1,8 @@
 #include "Uart.h"
-#include "../HalUart.h"
-#include "../HalInterrupt.h"
-#include "../../kernel/Kernel.h"
-#include "../../lib/stdio.h"
+#include "HalUart.h"
+#include "HalInterrupt.h"
+#include "Kernel.h"
+#include "stdio.h"
 
 extern volatile PL011_t* Uart;
 
@@ -11,11 +11,11 @@ static void interrupt_handler(void);
 void Hal_uart_init(void)
 {
 	/* Enable UART */
-    Uart->uartcr.bits.UARTEN = 0;  
+    Uart->uartcr.bits.UARTEN = 0;
     Uart->uartcr.bits.TXE = 1;
     Uart->uartcr.bits.RXE = 1;
-    Uart->uartcr.bits.UARTEN = 1;  
-	
+    Uart->uartcr.bits.UARTEN = 1;
+
 	/* Enable input interrupt */
 	Uart->uartimsc.bits.RXIM = 1;
 
@@ -53,10 +53,10 @@ static void interrupt_handler(void)
 	Hal_uart_put_char(ch);
 
 	// send event when interrupt occured
-	Kernel_send_events(KernelEventFlag_UartIn|KernelEventFlag_CmdIn);
+	Kernel_send_events(KernelEventFlag_UartIn | KernelEventFlag_CmdIn);
 
 	if (ch == 'X')
 	{
 		Kernel_send_events(KernelEventFlag_CmdOut);
-	}	
+	}
 }
