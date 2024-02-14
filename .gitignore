@@ -1,5 +1,6 @@
 *.bin
 *.o
 *.axf
+build/
 .vscode/
 *.json
