@@ -98,17 +98,19 @@ static void Timer_test(void)
 void User_task0(void)
 {
 	uint32_t local = 0;
-
+	
 	debug_printf("User Task #0 SP=0x%x\n", &local);
 	
 	while (true)
 	{
-		KernelEventFlag_t handle_event = Kernel_wait_events(KernelEventFlag_UartIn);
+		KernelEventFlag_t handle_event = Kernel_wait_events(KernelEventFlag_UartIn | KernelEventFlag_CmdOut);
 		switch (handle_event)
 		{
 			case KernelEventFlag_UartIn:
 				debug_printf("\nEvent handled by Task0\n");
-				Kernel_send_events(KernelEventFlag_CmdIn);
+				break;
+			case KernelEventFlag_CmdOut:
+				debug_printf("\nCmdOut handled by Task0\n");
 				break;
 		}
 		Kernel_yield();

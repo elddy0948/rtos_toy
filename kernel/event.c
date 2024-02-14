@@ -2,9 +2,6 @@
 #include "../include/stdint.h"
 #include "../include/stdbool.h"
 
-// Lib
-#include "../lib/stdio.h"
-
 // Kernel
 #include "./event.h"
 
