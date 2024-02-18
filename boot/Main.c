@@ -1,18 +1,18 @@
-#include "../include/stdint.h"
+#include "stdint.h"
 
 // Hal
-#include "../hal/HalUart.h"
-#include "../hal/HalInterrupt.h"
-#include "../hal/HalTimer.h"
+#include "HalUart.h"
+#include "HalInterrupt.h"
+#include "HalTimer.h"
 
 // Lib
-#include "../lib/stdio.h"
-#include "../lib/stdlib.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 // Kernel
-#include "../kernel/task.h"
-#include "../kernel/Kernel.h"
-#include "../kernel/event.h"
+#include "task.h"
+#include "Kernel.h"
+#include "event.h"
 
 static void Hw_init(void);
 static void Kernel_init(void);
@@ -33,7 +33,8 @@ int main(void)
 
 	Kernel_init();
 
-	while(1);
+	while (1)
+		;
 
 	return 0;
 }
@@ -41,7 +42,7 @@ int main(void)
 static void Hw_init(void)
 {
 	Hal_interrupt_init();
-  Hal_uart_init();
+	Hal_uart_init();
 	Hal_timer_init();
 }
 
@@ -70,12 +71,12 @@ static void Kernel_init(void)
 
 static void Printf_test(void)
 {
-	char* str = "printf pointer test";
-	char* nullptr = 0;
+	char *str = "printf pointer test";
+	char *nullptr = 0;
 	uint32_t i = 5;
 
 	// check which timer clock using now
-	uint32_t* sysctrl0 = (uint32_t*) 0x10001000;
+	uint32_t *sysctrl0 = (uint32_t *)0x10001000;
 
 	debug_printf("%s\n", "Hello printf");
 	debug_printf("output string pointer: %s\n", str);
@@ -91,27 +92,45 @@ static void Timer_test(void)
 	for (uint32_t i = 0; i < 5; ++i)
 	{
 		debug_printf("current count : %u\n", Hal_timer_get_1ms_counter());
-		delay(1);	// 1s
+		delay(1); // 1s
 	}
 }
 
 void User_task0(void)
 {
 	uint32_t local = 0;
-
 	debug_printf("User Task #0 SP=0x%x\n", &local);
+
+	uint8_t cmdBuffer[16];
+	uint32_t cmdBufferIndex = 0;
+	uint8_t uartch = 0;
 
 	while (true)
 	{
 		KernelEventFlag_t handle_event = Kernel_wait_events(KernelEventFlag_UartIn | KernelEventFlag_CmdOut);
 		switch (handle_event)
 		{
-			case KernelEventFlag_UartIn:
-				debug_printf("\nEvent handled by Task0\n");
-				break;
-			case KernelEventFlag_CmdOut:
-				debug_printf("\nCmdOut handled by Task0\n");
-				break;
+		case KernelEventFlag_UartIn:
+			Kernel_receive_message(KernelMsgQueue_Task0, &uartch, 1);
+			if (uartch == '\r')
+			{
+				cmdBuffer[cmdBufferIndex] = '\0';
+				Kernel_send_message(KernelMsgQueue_Task1, &cmdBufferIndex, 1);
+				Kernel_send_message(KernelMsgQueue_Task1, cmdBuffer, cmdBufferIndex);
+				Kernel_send_events(KernelEventFlag_CmdIn);
+				cmdBufferIndex = 0;
+			}
+			else
+			{
+				cmdBuffer[cmdBufferIndex] = uartch;
+				cmdBufferIndex++;
+				cmdBufferIndex %= 16;
+			}
+
+			break;
+		case KernelEventFlag_CmdOut:
+			debug_printf("\nCmdOut handled by Task0\n");
+			break;
 		}
 		Kernel_yield();
 	}
@@ -123,14 +142,20 @@ void User_task1(void)
 
 	debug_printf("User Task #1 SP=0x%x\n", &local);
 
+	uint8_t cmdlen = 0;
+	uint8_t cmd[16] = {0};
+
 	while (true)
 	{
 		KernelEventFlag_t handle_event = Kernel_wait_events(KernelEventFlag_CmdIn);
 		switch (handle_event)
 		{
-			case KernelEventFlag_CmdIn:
-				debug_printf("\nEvent handled by Task1\n");
-				break;
+		case KernelEventFlag_CmdIn:
+			memclr(cmd, 16);
+			Kernel_receive_message(KernelMsgQueue_Task1, &cmdlen, 1);
+			Kernel_receive_message(KernelMsgQueue_Task1, cmd, cmdlen);
+			debug_printf("\nRecv cmd : %s\n", cmd);
+			break;
 		}
 		Kernel_yield();
 	}
