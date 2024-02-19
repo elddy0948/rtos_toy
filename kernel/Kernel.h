@@ -4,6 +4,7 @@
 #include "../include/stdint.h"
 #include "event.h"
 #include "msg.h"
+#include "synch.h"
 
 void Kernel_start(void);
 void Kernel_yield(void);
@@ -19,5 +20,8 @@ KernelEventFlag_t Kernel_wait_events(uint32_t waiting_list);
 // Message API
 bool Kernel_send_message(KernelMsgQueue_t queueName, void* data, uint32_t count);
 uint32_t Kernel_receive_message(KernelMsgQueue_t queueName, void* data, uint32_t count);
+
+void Kernel_lock_sem(void);
+void Kernel_unlock_sem(void);
 
 #endif /* KERNEL_KERNEL_H_ */

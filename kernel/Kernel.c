@@ -1,4 +1,5 @@
 #include "../include/memio.h"
+#include "synch.h"
 #include "task.h"
 #include "Kernel.h"
 #include "stdio.h"
@@ -78,3 +79,15 @@ uint32_t Kernel_receive_message(KernelMsgQueue_t queueName, void *data, uint32_t
 
 	return count;
 }
+
+void Kernel_lock_sem(void)
+{
+	while (Kernel_sem_test() == false)
+		Kernel_yield();	
+}
+
+void Kernel_unlock_sem(void)
+{
+	Kernel_sem_release();
+}
+
