@@ -1,6 +1,3 @@
-#include "stdint.h"
-#include "stdbool.h"
-
 #include "synch.h"
 
 #define DEF_SEM_MAX 8
