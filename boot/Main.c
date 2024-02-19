@@ -20,6 +20,8 @@ static void Kernel_init(void);
 static void Printf_test(void);
 static void Timer_test(void);
 
+static void Test_critical_section(uint32_t p, uint32_t taskID);
+
 void User_task0(void);
 void User_task1(void);
 void User_task2(void);
@@ -52,6 +54,8 @@ static void Kernel_init(void)
 
 	Kernel_task_init();
 	Kernel_event_flag_init();
+	Kernel_msgQueue_init();
+	Kernel_sem_init(1);
 
 	taskID = Kernel_task_create(User_task0);
 
@@ -96,6 +100,21 @@ static void Timer_test(void)
 	}
 }
 
+static uint32_t shared_value;
+
+static void Test_critical_section(uint32_t p, uint32_t taskID)
+{
+	Kernel_lock_sem();
+	debug_printf("User Task #%u Send=%u\n", taskID, p);
+	shared_value = p;
+	Kernel_yield();
+	debug_printf("\nYield!\n");
+	delay(1);
+
+	debug_printf("User Task #%u Shared Value=%u\n", taskID, shared_value);
+	Kernel_unlock_sem();
+}
+
 void User_task0(void)
 {
 	uint32_t local = 0;
@@ -126,10 +145,9 @@ void User_task0(void)
 				cmdBufferIndex++;
 				cmdBufferIndex %= 16;
 			}
-
 			break;
 		case KernelEventFlag_CmdOut:
-			debug_printf("\nCmdOut handled by Task0\n");
+			Test_critical_section(5, 0);
 			break;
 		}
 		Kernel_yield();

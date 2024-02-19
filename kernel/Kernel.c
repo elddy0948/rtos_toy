@@ -50,7 +50,7 @@ KernelEventFlag_t Kernel_wait_events(uint32_t waiting_list)
 bool Kernel_send_message(KernelMsgQueue_t queueName, void *data, uint32_t count)
 {
 	uint8_t* d = (uint8_t*)data;
-	
+
 	for (uint32_t i = 0; i < count; ++i)
 	{
 		if (Kernel_msgQueue_enqueue(queueName, *d) == false)
@@ -62,7 +62,7 @@ bool Kernel_send_message(KernelMsgQueue_t queueName, void *data, uint32_t count)
 			}
 			return false;
 		}
-		d++;	
+		d++;
 	}
 	return true;
 }
@@ -82,8 +82,8 @@ uint32_t Kernel_receive_message(KernelMsgQueue_t queueName, void *data, uint32_t
 
 void Kernel_lock_sem(void)
 {
-	while (Kernel_sem_test() == false)
-		Kernel_yield();	
+	while (false == Kernel_sem_test())
+		Kernel_yield();
 }
 
 void Kernel_unlock_sem(void)
