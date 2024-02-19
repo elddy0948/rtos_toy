@@ -108,7 +108,6 @@ static void Test_critical_section(uint32_t p, uint32_t taskID)
 	debug_printf("User Task #%u Send=%u\n", taskID, p);
 	shared_value = p;
 	Kernel_yield();
-	debug_printf("\nYield!\n");
 	delay(1);
 
 	debug_printf("User Task #%u Shared Value=%u\n", taskID, shared_value);
@@ -187,6 +186,7 @@ void User_task2(void)
 
 	while (true)
 	{
+		Test_critical_section(3, 2);
 		Kernel_yield();
 	}
 }
